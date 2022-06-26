@@ -56,6 +56,7 @@ const useStyles = makeStyles()(() => ({
         top: 0,
         left: 0,
         right: 0,
+        zIndex: 1,
     },
     navLink: {
         display: "inline-flex",
@@ -78,7 +79,6 @@ const useStyles = makeStyles()(() => ({
         gap: "8px",
     },
     content: {
-        maxWidth: "1280px",
         margin: "0 auto",
         marginTop: "64px",
     },

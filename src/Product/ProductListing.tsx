@@ -21,7 +21,7 @@ const ProductListing: React.FC = () => {
     const {category} = useParams();
     const {classes} = useStyles();
 
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [categoryList, setCategoryList] = React.useState<string[]>([]);
     const [productList, setProductList] = React.useState<Product[]>([]);
     const [filter, setFilter] = React.useState<{ category: string | null }>({category: null});
@@ -88,11 +88,18 @@ const ProductListing: React.FC = () => {
                     </List>
                 </div>
             </div>
-            <div className={classes.contentList}>
-                <ProductPreviewSkeleton />
-                <ProductPreviewSkeleton />
-                <ProductPreviewSkeleton />
-                {/*{productList.map((p) => (<ProductPreview key={p.id} product={p} />))}*/}
+            <div className={classes.contentWrapper}>
+                <Typography variant="h4" sx={{ marginBottom: '16px' }}>Products{!isLoading ? ` (${productList.length})` : ''}</Typography>
+                <div className={classes.contentList}>
+                    {isLoading ? (
+                        <>
+                            <ProductPreviewSkeleton />
+                            <ProductPreviewSkeleton />
+                            <ProductPreviewSkeleton />
+                            <ProductPreviewSkeleton />
+                        </>
+                    ) : productList.map((p) => (<ProductPreview key={p.id} product={p} />))}
+                </div>
             </div>
         </div>
     );
@@ -109,7 +116,7 @@ const useStyles = makeStyles()(() => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "250px",
+        minWidth: "250px",
         padding: '0 24px',
     },
     filterHeader: {
@@ -119,12 +126,14 @@ const useStyles = makeStyles()(() => ({
         gap: "16px",
     },
     filterSection: {},
+    contentWrapper: {
+        padding: '0 24px',
+    },
     contentList: {
         display: "flex",
         flex: 1,
         flexDirection: "row",
         flexWrap: "wrap",
         gap: "2em",
-        padding: '0 24px',
     },
 }));

@@ -3,10 +3,8 @@ import axios from "axios";
 import {useParams} from "react-router-dom";
 
 import {makeStyles} from 'tss-react/mui';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import {
     Checkbox,
-    IconButton,
     List,
     ListItem,
     ListItemButton,
@@ -89,7 +87,7 @@ const ProductListing: React.FC = () => {
                 </div>
             </div>
             <div className={classes.contentWrapper}>
-                <Typography variant="h4" sx={{ marginBottom: '16px' }}>Products{!isLoading ? ` (${productList.length})` : ''}</Typography>
+                <Typography variant="h4" sx={{marginBottom: '16px'}}>Products{!isLoading ? ` (${productList.length})` : ''}</Typography>
                 <div className={classes.contentList}>
                     {isLoading ? (
                         <>
@@ -98,7 +96,9 @@ const ProductListing: React.FC = () => {
                             <ProductPreviewSkeleton />
                             <ProductPreviewSkeleton />
                         </>
-                    ) : productList.map((p) => (<ProductPreview key={p.id} product={p} />))}
+                    ) : productList.map((p) => (
+                        <ProductPreview key={p.id} product={p} />
+                    ))}
                 </div>
             </div>
         </div>
@@ -115,7 +115,6 @@ const useStyles = makeStyles()(() => ({
     filter: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         minWidth: "250px",
         padding: '0 24px',
     },

@@ -1,8 +1,11 @@
 import React from 'react';
+import clsx from "clsx";
+import {Link} from "react-router-dom";
 import {makeStyles} from "tss-react/mui";
-import {Skeleton, Tooltip, Typography} from "@mui/material";
+import {Button, Skeleton, Tooltip, Typography} from "@mui/material";
 import ProductRating from "./ProductRating";
 import {grey} from "@mui/material/colors";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const ProductPreview: React.FC<{
     product: Product,
@@ -10,20 +13,26 @@ const ProductPreview: React.FC<{
     const { product } = props;
     const { classes } = useStyles();
 
+    const addToCart = React.useCallback((id: string) => () => {
+    }, []);
+
     return (
         <div className={classes.root}>
-            <div className={classes.imageWrapper}>
-                <div className={classes.image} style={{ backgroundImage: `url('${product.image}')` }} />
-            </div>
-            {product.title.length>35 ? (
-                <Tooltip title={product.title}>
-                    <Typography variant="h6">{product.title.substring(0, 35)}…</Typography>
-                </Tooltip>
-            ) : (
-                <Typography variant="h6">{product.title}</Typography>
-            )}
-            <ProductRating rating={product.rating} />
-            <Typography variant="h6">€{product.price.toFixed(2)}</Typography>
+            <Link to={`/product/${product.id}`} className={classes.wrapper}>
+                <div className={classes.imageWrapper}>
+                    <div className={clsx(classes.image, 'product-image')} style={{ backgroundImage: `url('${product.image}')` }} />
+                </div>
+                {product.title.length>35 ? (
+                    <Tooltip title={product.title}>
+                        <Typography variant="h6" className={classes.title}>{product.title.substring(0, 35)}…</Typography>
+                    </Tooltip>
+                ) : (
+                    <Typography variant="h6" className={classes.title}>{product.title}</Typography>
+                )}
+                <ProductRating rating={product.rating} />
+                <Typography variant="h6">€{product.price.toFixed(2)}</Typography>
+            </Link>
+            <Button variant="contained" startIcon={<AddShoppingCartIcon />} fullWidth onClick={addToCart(product.id)}>Add to Cart</Button>
         </div>
     );
 };
@@ -47,9 +56,20 @@ const useStyles = makeStyles()(() => ({
     root: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start",
         gap: "8px",
         flex: "0 0 260px",
+    },
+    wrapper: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        gap: "8px",
+
+        "&:hover": {
+            ".product-image": {
+                transform: "scale(1.1)",
+            },
+        },
     },
     skeletonRoot: {
         display: "flex",
@@ -69,5 +89,10 @@ const useStyles = makeStyles()(() => ({
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
+        transform: "scale(1)",
+        transition: "transform ease 0.2s",
+    },
+    title: {
+        minHeight: "64px",
     }
 }));

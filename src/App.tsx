@@ -6,6 +6,7 @@ import {
     Route,
 } from "react-router-dom";
 
+import {RecoilRoot} from "recoil";
 
 import './App.css';
 
@@ -15,15 +16,17 @@ import Layout from "./Layout";
 
 function App() {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<ProductListing />} />
-                    <Route path="/products/:category" element={<ProductListing />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                </Route>
-            </Routes>
-        </Router>
+        <RecoilRoot>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Layout />}>
+                        <Route index element={<ProductListing />} />
+                        <Route path="/products/:category" element={<ProductListing />} />
+                        <Route path="/product/:id" element={<ProductDetails />} />
+                    </Route>
+                </Routes>
+            </Router>
+        </RecoilRoot>
     );
 }
 

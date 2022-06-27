@@ -7,11 +7,16 @@ import {grey} from "@mui/material/colors";
 import ProductRating from "./ProductRating";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import {useRecoilState} from "recoil";
+import {cartState, CartState, favoritesState, FavoritesState} from "../store";
 
 const ProductDetails: React.FC = () => {
-    let { id } = useParams();
+    let { id = '' } = useParams();
 
     const { classes } = useStyles();
+
+    const [cart, setCart] = useRecoilState<CartState>(cartState);
+    const [favorites, setFavorites] = useRecoilState<FavoritesState>(favoritesState);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [product, setProduct] = React.useState<Product | null>(null);
@@ -22,6 +27,28 @@ const ProductDetails: React.FC = () => {
             .then((res) => setProduct(res.data))
             .finally(() => setIsLoading(false));
     }, [id]);
+
+    const toggleFavorites = React.useCallback(() => {
+        const newFavorites = [...favorites];
+        const idx = favorites.indexOf(id);
+        if (idx === -1) {
+            newFavorites.push(id);
+        } else {
+            newFavorites.splice(idx, 1);
+        }
+        setFavorites(newFavorites);
+    }, [favorites, id, setFavorites]);
+
+    const addToCart = React.useCallback(() => {
+        setCart({
+            ...cart,
+            count: cart.count + 1,
+            items: {
+                ...cart.items,
+                [id]: (cart.items[id] || 0) + 1,
+            }
+        })
+    }, [cart, id, setCart]);
 
     if (isLoading || product === null) {
         return (
@@ -51,8 +78,22 @@ const ProductDetails: React.FC = () => {
                 <ProductRating rating={product.rating} fontSize="large" />
                 <Typography variant="h4">€{product.price.toFixed(2)}</Typography>
                 <div className={classes.buttons}>
-                    <Button variant="outlined" size="large" startIcon={<FavoriteBorderIcon />}>Add to favorites</Button>
-                    <Button variant="contained" size="large" startIcon={<AddShoppingCartIcon />}>Add to cart</Button>
+                    <Button
+                        variant="outlined"
+                        size="large"
+                        startIcon={<FavoriteBorderIcon />}
+                        onClick={toggleFavorites}
+                    >
+                        {favorites.includes(id) ? "Remove from" : "Add to"} favorites
+                    </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        startIcon={<AddShoppingCartIcon />}
+                        onClick={addToCart}
+                    >
+                        Add to cart
+                    </Button>
                 </div>
             </div>
         </div>

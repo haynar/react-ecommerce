@@ -8,6 +8,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {ReactComponent as Logo} from './logo.svg';
 
 import {blue} from "@mui/material/colors";
+import {useRecoilState} from "recoil";
+import {cartState, favoritesState} from "./store";
 
 const NavIconButton = styled(IconButton)(({theme}) => ({
     color: theme.palette.getContrastText(blue[500]),
@@ -15,6 +17,9 @@ const NavIconButton = styled(IconButton)(({theme}) => ({
 
 const Layout: React.FC = () => {
     const {classes} = useStyles();
+    const [cart] = useRecoilState(cartState);
+    const [favorites] = useRecoilState(favoritesState);
+
 
     return (
         <main>
@@ -25,12 +30,12 @@ const Layout: React.FC = () => {
                 </Link>
                 <div className={classes.navActions}>
                     <NavIconButton aria-label="favorites">
-                        <Badge badgeContent={0} color="secondary">
+                        <Badge badgeContent={favorites.length} color="secondary">
                             <FavoriteBorderIcon fontSize="medium" />
                         </Badge>
                     </NavIconButton>
                     <NavIconButton aria-label="shopping cart">
-                        <Badge badgeContent={0} color="secondary">
+                        <Badge badgeContent={cart.count} color="secondary">
                             <ShoppingCartIcon fontSize="medium" />
                         </Badge>
                     </NavIconButton>

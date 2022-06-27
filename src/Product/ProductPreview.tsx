@@ -2,19 +2,30 @@ import React from 'react';
 import clsx from "clsx";
 import {Link} from "react-router-dom";
 import {makeStyles} from "tss-react/mui";
+import {useRecoilState} from "recoil";
 import {Button, Skeleton, Tooltip, Typography} from "@mui/material";
 import ProductRating from "./ProductRating";
 import {grey} from "@mui/material/colors";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import {CartState, cartState} from "../store";
 
 const ProductPreview: React.FC<{
     product: Product,
 }> = (props) => {
     const { product } = props;
     const { classes } = useStyles();
+    const [cart, setCart] = useRecoilState<CartState>(cartState);
 
     const addToCart = React.useCallback((id: string) => () => {
-    }, []);
+        setCart({
+            ...cart,
+            count: cart.count + 1,
+            items: {
+                ...cart.items,
+                [id]: (cart.items[id] || 0) + 1,
+            }
+        })
+    }, [cart, setCart]);
 
     return (
         <div className={classes.root}>

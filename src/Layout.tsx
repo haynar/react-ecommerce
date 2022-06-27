@@ -28,11 +28,13 @@ const Layout: React.FC = () => {
                     <span>E-Shopper</span>
                 </Link>
                 <div className={classes.navActions}>
-                    <NavIconButton aria-label="favorites">
-                        <Badge badgeContent={favorites.length} color="secondary">
-                            <FavoriteBorderIcon fontSize="medium" />
-                        </Badge>
-                    </NavIconButton>
+                    <Link to="/favorites">
+                        <NavIconButton aria-label="favorites">
+                            <Badge badgeContent={favorites.length} color="secondary">
+                                <FavoriteBorderIcon fontSize="medium" />
+                            </Badge>
+                        </NavIconButton>
+                    </Link>
                     <Link to="/cart">
                         <NavIconButton aria-label="shopping cart">
                             <Badge badgeContent={cart.count} color="secondary">

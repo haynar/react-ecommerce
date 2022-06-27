@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from "axios";
-import {useParams} from "react-router-dom";
 
 import {makeStyles} from 'tss-react/mui';
 import {
@@ -18,7 +17,6 @@ import {useRecoilState} from "recoil";
 import {ProductCacheState, productCacheState} from "../store";
 
 const ProductListing: React.FC = () => {
-    const {category} = useParams();
     const {classes} = useStyles();
     const [productCache, setProductCache] = useRecoilState<ProductCacheState>(productCacheState);
 
@@ -34,10 +32,15 @@ const ProductListing: React.FC = () => {
             });
     }, []);
 
-    const loadProductList = React.useCallback(() => {
+    const loadProductList = React.useCallback((category: string | null = null) => {
         setIsLoading(true);
-        axios.get(`https://fakestoreapi.com/products${filter.category ? `/category/${filter.category}` : ''}`)
+        axios.get(`https://fakestoreapi.com/products${category ? `/category/${category}` : ''}`)
             .then((res) => {
+                // simply ignoring the mismatched requests
+                if (category !== filter.category) {
+                    return;
+                }
+
                 const newCache = { ...productCache };
                 // updating global product cache
                 res.data.forEach((p: Product) => newCache[p.id] = p);
@@ -63,8 +66,8 @@ const ProductListing: React.FC = () => {
     }, []);
 
     React.useEffect(() => {
-        loadProductList();
-    }, [loadProductList]);
+        loadProductList(filter.category);
+    }, [filter]);
 
     return (
         <div className={classes.root}>

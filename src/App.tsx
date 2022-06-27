@@ -14,6 +14,7 @@ import ProductDetails from "./Product/ProductDetails";
 import ProductListing from "./Product/ProductListing";
 import Layout from "./Layout";
 import CartView from "./CartView";
+import FavoritesView from "./FavoritesView";
 
 function App() {
     return (
@@ -23,7 +24,8 @@ function App() {
                     <Route path="/" element={<Layout />}>
                         <Route index element={<ProductListing />} />
                         <Route path="/cart" element={<CartView />} />
-                        <Route path="/products/:category" element={<ProductListing />} />
+                        <Route path="/favorites" element={<FavoritesView />} />
+                        <Route path="/products" element={<ProductListing />} />
                         <Route path="/product/:id" element={<ProductDetails />} />
                     </Route>
                 </Routes>

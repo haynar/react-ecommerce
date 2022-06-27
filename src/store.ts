@@ -7,6 +7,10 @@ export type CartState = {
 
 export type FavoritesState = string[];
 
+export type ProductCacheState = {
+    [key: string]: Product;
+}
+
 
 export const cartState = atom<CartState>({
     key: "cart",
@@ -19,4 +23,9 @@ export const cartState = atom<CartState>({
 export const favoritesState = atom<FavoritesState>({
     key: "favorites",
     default: [],
+});
+
+export const productCacheState = atom<ProductCacheState>({
+    key: 'product-cache',
+    default: {},
 });

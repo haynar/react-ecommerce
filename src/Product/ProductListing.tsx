@@ -14,10 +14,13 @@ import {
 } from "@mui/material";
 
 import ProductPreview, {ProductPreviewSkeleton} from "./ProductPreview";
+import {useRecoilState} from "recoil";
+import {ProductCacheState, productCacheState} from "../store";
 
 const ProductListing: React.FC = () => {
     const {category} = useParams();
     const {classes} = useStyles();
+    const [productCache, setProductCache] = useRecoilState<ProductCacheState>(productCacheState);
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [categoryList, setCategoryList] = React.useState<string[]>([]);
@@ -35,12 +38,18 @@ const ProductListing: React.FC = () => {
         setIsLoading(true);
         axios.get(`https://fakestoreapi.com/products${filter.category ? `/category/${filter.category}` : ''}`)
             .then((res) => {
+                const newCache = { ...productCache };
+                // updating global product cache
+                res.data.forEach((p: Product) => newCache[p.id] = p);
+                setProductCache(newCache);
+
+                // setting local product list
                 setProductList(res.data);
             })
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [filter]);
+    }, [filter, productCache, setProductCache]);
 
     const handleCategoryToggle = React.useCallback((cat: string) => () => {
         setFilter({

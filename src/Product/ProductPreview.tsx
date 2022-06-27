@@ -35,7 +35,7 @@ const ProductPreview: React.FC<{
                 </div>
                 {product.title.length>35 ? (
                     <Tooltip title={product.title}>
-                        <Typography variant="h6" className={classes.title}>{product.title.substring(0, 35)}…</Typography>
+                        <Typography variant="h6" className={classes.title}>{product.title.substring(0, 35).trim()}…</Typography>
                     </Tooltip>
                 ) : (
                     <Typography variant="h6" className={classes.title}>{product.title}</Typography>

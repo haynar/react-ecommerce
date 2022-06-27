@@ -20,7 +20,6 @@ const Layout: React.FC = () => {
     const [cart] = useRecoilState(cartState);
     const [favorites] = useRecoilState(favoritesState);
 
-
     return (
         <main>
             <nav className={classes.nav}>
@@ -34,11 +33,13 @@ const Layout: React.FC = () => {
                             <FavoriteBorderIcon fontSize="medium" />
                         </Badge>
                     </NavIconButton>
-                    <NavIconButton aria-label="shopping cart">
-                        <Badge badgeContent={cart.count} color="secondary">
-                            <ShoppingCartIcon fontSize="medium" />
-                        </Badge>
-                    </NavIconButton>
+                    <Link to="/cart">
+                        <NavIconButton aria-label="shopping cart">
+                            <Badge badgeContent={cart.count} color="secondary">
+                                <ShoppingCartIcon fontSize="medium" />
+                            </Badge>
+                        </NavIconButton>
+                    </Link>
                 </div>
             </nav>
             <div className={classes.content}>
